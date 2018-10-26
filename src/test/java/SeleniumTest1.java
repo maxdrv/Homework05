@@ -73,7 +73,7 @@ public class SeleniumTest1 {
 
         //WebElement howMuchTrips = findByXpath("//*[@class = 'btn-group-select width-xs-19rem btn-group']//button[@type='button' and contains(., 'Несколько')]");
         // Выбор несоклько поездок
-        WebElement howMuchTrips = findByXpath("//*[@class = 'btn-group-select width-xs-19rem btn-group']//button[@type='button' and contains(., 'Несколько')]");
+        WebElement howMuchTrips = findByXpath("//button[@type='button' and contains(., 'Несколько')]");
         // ожидание пока элемент станет виден
         wait.pollingEvery(Duration.ofMillis(300))
                 .until(ExpectedConditions.elementToBeClickable(howMuchTrips));
@@ -95,21 +95,53 @@ public class SeleniumTest1 {
         chooseRegion.selectByVisibleText("Испания");
 
         // Дата первой поездки
-        WebElement dateInput = findByXpath("//*[@class = 'form-control-multiple-autocomplete-actual-input tt-input']");
+        WebElement dateInput = findByXpath("//input[@data-test-name ='FirstDepartureDate']");
+        scrollToElement(By.xpath("//input[@data-test-name ='FirstDepartureDate']"));
+        dateInput.click();
+        dateInput.sendKeys("01112018");
+        action.sendKeys(Keys.ENTER).perform();
 
+        // Выбор Не более 90 дней
+        WebElement amountOfDays = findByXpath("//*[@class = 'form-group clearfix']//label[contains(text(), 'Не более 90 дней')]");
+        scrollToElement(By.xpath("//*[@class = 'form-group clearfix']//label[contains(text(), 'Не более 90 дней')]"));
+        amountOfDays.click();
 
-//        WebElement choseCountryInput = findByXpath("//*[@class = 'form-control validation-control-has-error']");
-//        choseCountryInput.click();
+        // Ввод имени и фамилии
+        //div[@class = 'form-group validation-group-has-error']//input[1]
+        WebElement nameInput = findByXpath("//div[@data-test-name = 'InsuredPerson']//input[@data-test-name = 'FullName']");
+        nameInput.click();
+        nameInput.sendKeys("ivanov Ivan");
 
-        //  step 9 Нажать рассчитать
+        // Ввод даты рождения
+        WebElement dateOfBirthInput = findByXpath("//div[@data-test-name = 'InsuredPerson']//input[@data-test-name = 'BirthDate']");
+        dateOfBirthInput.click();
+        dateOfBirthInput.sendKeys("10101990");
 
+        // Планируется активный отдых
+        //div[@class = 'toggle toggle-rgs off']//input[@type = 'checkbox']
+        WebElement activeInput = findByXpath("//div[@class = 'toggle off toggle-rgs' and @data-toggle = 'toggle']");
+        //scrollToElement(By.xpath("//div[@class = 'toggle off toggle-rgs' and @data-toggle = 'toggle']"));
+        activeInput.click();
 
-//        10. Проверить значения:
+        // Согласен на обработку данных
+
+        WebElement personalDataInput = findByXpath("//input[@type = 'checkbox' and @data-test-name = 'IsProcessingPersonalDataToCalculate' ]");
+        scrollToElement(By.xpath("//input[@type = 'checkbox' and @data-test-name = 'IsProcessingPersonalDataToCalculate' ]"));
+        personalDataInput.click();
+
+        // step 9 Нажать рассчитать
+        WebElement calculateInput = findByXpath("//button[@type = 'submit' and contains(., 'Рассчитать')]");
+        scrollToElement(By.xpath("//button[@type = 'submit' and contains(., 'Рассчитать')]"));
+        calculateInput.click();
+
+//        step 10 Проверить значения:
 //        Условия страхования – Многократные поездки в течении года
 //        Территория – Шенген
 //                Застрахованный
 //        Дата рождения
 //        Активный отдых - включен
+
+
 
 
     }

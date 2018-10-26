@@ -134,12 +134,27 @@ public class SeleniumTest1 {
         scrollToElement(By.xpath("//button[@type = 'submit' and contains(., 'Рассчитать')]"));
         calculateInput.click();
 
-//        step 10 Проверить значения:
-//        Условия страхования – Многократные поездки в течении года
-//        Территория – Шенген
-//                Застрахованный
-//        Дата рождения
-//        Активный отдых - включен
+        // step 10 Проверить значения:
+        // Условия страхования – Многократные поездки в течении года
+        checkForText = findByXpath("//*[@class='page-header']");
+        expectedText = "Многократные поездки в течении года";
+        Assert.assertEquals("Значение условия страхования не соотвествует  ожидаемому", expectedText, checkForText.getText());
+        // Территория – Шенген
+        checkForText = findByXpath("//*[@class='page-header']");
+        expectedText = "Шенген";
+        Assert.assertEquals("Значение территории действия не соотвествует  ожидаемому", expectedText, checkForText.getText());
+        // Застрахованный
+        checkForText = findByXpath("//*[@class='page-header']");
+        expectedText = "IVANOV IVAN";
+        Assert.assertEquals("Значения ФИО застрахованного не соотвествует  ожидаемому", expectedText, checkForText.getText());
+        // Дата рождения
+        checkForText = findByXpath("//*[@class='page-header']");
+        expectedText = "Многократные поездки в течении года";
+        Assert.assertEquals("Значения даты рождения не соотвествует  ожидаемому", expectedText, checkForText.getText());
+        // Активный отдых - включен
+        checkForText = findByXpath("//*[@class='page-header']");
+        expectedText = "Включен";
+        Assert.assertEquals("Значения активного отдыха не соотвествует  ожидаемому", expectedText, checkForText.getText());
 
 
 

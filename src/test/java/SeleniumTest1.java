@@ -88,9 +88,7 @@ public class SeleniumTest1 {
         action.sendKeys(Keys.DOWN).sendKeys(Keys.ENTER).perform();
 
         // Выбор списка стран
-        WebElement choseFromInput = driver.findElement(By.name("ArrivalCountryList"));
-        choseFromInput.click();
-        // Выбор Италии из списка
+        WebElement choseFromInput = driver.findElement(By.xpath("//select[@id='ArrivalCountryList']"));
         Select chooseRegion = new Select(choseFromInput);
         chooseRegion.selectByVisibleText("Испания");
 

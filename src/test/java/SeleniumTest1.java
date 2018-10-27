@@ -28,7 +28,7 @@ public class SeleniumTest1 {
 
     @After
     public void closeDriver() {
-        //driver.close();
+        driver.quit();
     }
 
     @Test
@@ -73,8 +73,8 @@ public class SeleniumTest1 {
 
         //WebElement howMuchTrips = findByXpath("//*[@class = 'btn-group-select width-xs-19rem btn-group']//button[@type='button' and contains(., 'Несколько')]");
         // Выбор несоклько поездок
-        WebElement howMuchTrips = findByXpath("//button[@type='button' and contains(., 'Несколько')]");
-        // ожидание пока элемент станет виден
+        WebElement howMuchTrips = findByXpath("//button[@type='button' and @data-test-value = 'Multiple']");
+        // ожидание пока элемент станет доступным для
         wait.pollingEvery(Duration.ofMillis(300))
                 .until(ExpectedConditions.elementToBeClickable(howMuchTrips));
         howMuchTrips.click();
@@ -109,6 +109,8 @@ public class SeleniumTest1 {
         // Ввод имени и фамилии
         //div[@class = 'form-group validation-group-has-error']//input[1]
         WebElement nameInput = findByXpath("//div[@data-test-name = 'InsuredPerson']//input[@data-test-name = 'FullName']");
+        wait.pollingEvery(Duration.ofMillis(300))
+                .until(ExpectedConditions.elementToBeClickable(howMuchTrips));
         nameInput.click();
         nameInput.sendKeys("ivanov Ivan");
 
@@ -136,29 +138,38 @@ public class SeleniumTest1 {
 
         // step 10 Проверить значения:
         // Условия страхования – Многократные поездки в течении года
-        checkForText = findByXpath("//*[@class='page-header']");
-        expectedText = "Многократные поездки в течении года";
+        checkForText = findByXpath("//div[@class = 'summary-row' and contains(., 'Условия страхования')]//span[@class = 'summary-value']");
+//        wait.pollingEvery(Duration.ofMillis(300))
+//                .until(ExpectedConditions.elementToBeClickable(checkForText));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'summary-row' and contains(., 'Условия страхования')]//span[@class = 'summary-value']")));
+        scrollToElement(By.xpath("//div[@class = 'summary-row' and contains(., 'Условия страхования')]//span[@class = 'summary-value']"));
+        expectedText = "Многократные поездки в течение года";
         Assert.assertEquals("Значение условия страхования не соотвествует  ожидаемому", expectedText, checkForText.getText());
+
         // Территория – Шенген
-        checkForText = findByXpath("//*[@class='page-header']");
+        checkForText = findByXpath("//span[@data-bind = 'foreach: countries']/strong[1]");
+        WebDriverWait wait2 = new WebDriverWait(driver, 5);
+//        wait2.pollingEvery(Duration.ofMillis(300))
+//                .until(ExpectedConditions.elementToBeClickable(checkForText));
         expectedText = "Шенген";
         Assert.assertEquals("Значение территории действия не соотвествует  ожидаемому", expectedText, checkForText.getText());
+
         // Застрахованный
-        checkForText = findByXpath("//*[@class='page-header']");
+        checkForText = findByXpath("//div[@class = 'summary-row' and contains(., 'Застрахованный')]//span[@class = 'summary-value']/strong[1]");
         expectedText = "IVANOV IVAN";
-        Assert.assertEquals("Значения ФИО застрахованного не соотвествует  ожидаемому", expectedText, checkForText.getText());
+//        wait2.pollingEvery(Duration.ofMillis(300))
+//                .until(ExpectedConditions.elementToBeClickable(checkForText));
+        Assert.assertEquals("Значения ФИ застрахованного не соотвествует  ожидаемому", expectedText, checkForText.getText());
+
         // Дата рождения
-        checkForText = findByXpath("//*[@class='page-header']");
-        expectedText = "Многократные поездки в течении года";
+        checkForText = findByXpath("//div[@class = 'summary-row' and contains(., 'Застрахованный')]//span[@class = 'summary-value']/span[1]/strong[1]");
+        expectedText = "10.10.1990";
         Assert.assertEquals("Значения даты рождения не соотвествует  ожидаемому", expectedText, checkForText.getText());
+
         // Активный отдых - включен
-        checkForText = findByXpath("//*[@class='page-header']");
+        checkForText = findByXpath("//div[@class = 'summary-row']//span[@class = 'summary-value' and contains(., 'включая активный отдых')]/span[@class = 'text-bold']");
         expectedText = "Включен";
         Assert.assertEquals("Значения активного отдыха не соотвествует  ожидаемому", expectedText, checkForText.getText());
-
-
-
-
     }
 
     public void scrollToElement(By by) {

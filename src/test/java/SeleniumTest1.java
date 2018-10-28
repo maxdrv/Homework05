@@ -71,13 +71,19 @@ public class SeleniumTest1 {
         //
 
 
-        //WebElement howMuchTrips = findByXpath("//*[@class = 'btn-group-select width-xs-19rem btn-group']//button[@type='button' and contains(., 'Несколько')]");
-        // Выбор несоклько поездок
-        WebElement howMuchTrips = findByXpath("//button[@type='button' and @data-test-value = 'Multiple']");
-        // ожидание пока элемент станет доступным для
+        WebElement howMuchTrips = findByXpath("//button[@type='button']//span[contains(text(), 'Несколько')]");
         wait.pollingEvery(Duration.ofMillis(300))
                 .until(ExpectedConditions.elementToBeClickable(howMuchTrips));
-        howMuchTrips.click();
+        //howMuchTrips.click();
+        // клик с использованием JavaScript
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click();", howMuchTrips);
+
+        /*
+        JavascriptExecutor javascript = (JavascriptExecutor) driver;
+        javascript.executeScript("var element = document.querySelector(\"//button[@type='button']//span[contains(text(), 'Несколько')]\");");
+        //element.value = "whatever";
+        */
 
         // Ввод "Шенген" в поле
         WebElement whereWeGoInput = findByXpath("//*[@class = 'form-control-multiple-autocomplete-actual-input tt-input']");
@@ -89,6 +95,8 @@ public class SeleniumTest1 {
 
         // Выбор списка стран
         WebElement choseFromInput = driver.findElement(By.xpath("//select[@id='ArrivalCountryList']"));
+        wait.pollingEvery(Duration.ofMillis(300))
+                .until(ExpectedConditions.elementToBeClickable(choseFromInput));
         Select chooseRegion = new Select(choseFromInput);
         chooseRegion.selectByVisibleText("Испания");
 
@@ -108,7 +116,7 @@ public class SeleniumTest1 {
         //div[@class = 'form-group validation-group-has-error']//input[1]
         WebElement nameInput = findByXpath("//div[@data-test-name = 'InsuredPerson']//input[@data-test-name = 'FullName']");
         wait.pollingEvery(Duration.ofMillis(300))
-                .until(ExpectedConditions.elementToBeClickable(howMuchTrips));
+                .until(ExpectedConditions.elementToBeClickable(nameInput));
         nameInput.click();
         nameInput.sendKeys("ivanov Ivan");
 
@@ -174,7 +182,7 @@ public class SeleniumTest1 {
         Locatable element = (Locatable) driver.findElement(by);
         Point p = element.getCoordinates().onPage();
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollTo(" + p.getX() + "," + (p.getY()+150) + ");");
+        js.executeScript("window.scrollTo(" + p.getX() + "," + (p.getY()+50) + ");");
     }
 
     private WebElement findByXpath(String xpath) {
